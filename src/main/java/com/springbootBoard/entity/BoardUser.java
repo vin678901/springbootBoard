@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "board_user")
@@ -34,6 +35,8 @@ public class BoardUser {
     @Column(nullable = false)
     private String password;
 
+    @ElementCollection
+    private List<Long> likedList;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

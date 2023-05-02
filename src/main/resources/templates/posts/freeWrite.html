@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+>
+
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+
+
+
+
+
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+
+
+
+
+
+    </script>
+
+</th:block>
+
+<div layout:fragment="content">
+    <form action="/posts/free/write" method="post" role="form" th:object="${freePostsDto}">
+        <div class="form-group">
+            <label th:for="title">제목</label>
+            <input class="form-control" placeholder="내용을 입력해주세요" th:field="*{title}" type="text">
+
+            <p class="fieldError" th:errors="*{title}" th:if="${#fields.hasErrors('title')}">Incorrect data</p>
+
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">내용</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" th:field="*{content}"></textarea>
+            <p class="fieldError" th:errors="*{content}" th:if="${#fields.hasErrors('content')}">Incorrect data</p>
+        </div>
+
+        <button type="submit" class="btn btn-dark">글 작성</button>
+    </form>
+
+</div>
+</html>

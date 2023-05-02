@@ -2,6 +2,7 @@ package com.springbootBoard.controller;
 
 import com.springbootBoard.dto.UserFormDto;
 import com.springbootBoard.dto.UserUpdateDto;
+import com.springbootBoard.entity.BoardUser;
 import com.springbootBoard.service.BoardUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,17 +31,20 @@ public class UserController {
     }
 
     @PostMapping("/new")
-    public String postUserForm(@Valid UserUpdateDto userUpdateDto, BindingResult bindingResult, Model model, Principal principal) {
-        String email = principal.getName();
+    public String userForm(@Valid UserFormDto userFormDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "user/userForm";
         }
+
         try {
-            boardUserService.updateBoardUser(email, userUpdateDto);//여기
+            userFormDto.setPassword(passwordEncoder.encode(userFormDto.getPassword()));
+            BoardUser boardUser = userFormDto.toEntity();
+            boardUserService.save(boardUser);
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "user/userForm";
         }
+
         return "redirect:/";
     }
 
@@ -65,6 +69,7 @@ public class UserController {
     @PostMapping("/update")
     public String postUpdateForm(@Valid UserUpdateDto userUpdateDto, BindingResult bindingResult,
                                  Model model, Principal principal) {
+
         if (bindingResult.hasErrors()) {
             return "user/userUpdateForm";
         }

@@ -1,6 +1,5 @@
 package com.springbootBoard.service;
 
-import com.springbootBoard.dto.UserFormDto;
 import com.springbootBoard.dto.UserUpdateDto;
 import com.springbootBoard.entity.BoardUser;
 import com.springbootBoard.repository.BoardUserRepository;
@@ -27,6 +26,9 @@ public class BoardUserService implements UserDetailsService {
         return boardUserRepository.save(boardUser);
     }
 
+    public BoardUser getUserByEmail(String email) {
+        return boardUserRepository.findByEmail(email);
+    }
 
     public void validateEmail(String email) {
         if (boardUserRepository.findByEmail(email) != null) {
