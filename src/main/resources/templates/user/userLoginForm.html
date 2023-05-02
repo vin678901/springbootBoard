@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<link th:href="@{../css/floating-labels.css}" rel="stylesheet">
+
+<th:block layout:fragment="css">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+
+
+
+
+
+
+
+
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <form role="form" method="post" action="/users/login" class="form-signin">
+        <div class="text-center mb-4">
+            <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Floating labels</h1>
+            <p>Build form controls with floating labels via the <code>:placeholder-shown</code> pseudo-element. <a
+                    href="https://caniuse.com/#feat=css-placeholder-shown">Works in latest Chrome, Safari, Firefox, and
+                IE 10/11 (prefixed).</a></p>
+        </div>
+
+        <div class="form-label-group">
+            <label th:for="email">이메일</label>
+            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address">
+        </div>
+
+        <div class="form-label-group">
+            <label th:for="password">비밀번호</label>
+
+            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"
+                   required>
+        </div>
+        <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+
+        <button class="btn btn-lg btn-primary btn-block">로그인</button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onClick="location.href='/users/new'">회원가입
+        </button>
+        <p class="mt-5 mb-3 text-muted text-center">&copy; 2023</p>
+
+    </form>
+</div>
+</html>
