@@ -30,6 +30,7 @@
         }
       }
 
+
     </style>
 </th:block>
 
@@ -44,6 +45,7 @@
         });
 
 
+
     </script>
 
 </th:block>
@@ -56,6 +58,7 @@
                 alert(errorMessage);
             }
         });
+
 
     </script>
 
@@ -67,6 +70,7 @@
         }
 
 
+
     </style>
 </th:block>
 
@@ -76,7 +80,7 @@
 
             <div class="col-md-8 order-md-1">
                 <h4 class="mb-3">회원 정보 수정</h4>
-                <form action="/users/new" method="post" class="needs-validation" th:object="${userUpdateDto}">
+                <form action="/users/update" method="post" class="needs-validation" th:object="${userUpdateDto}">
 
                     <div class="mb-3">
                         <label th:for="name">이름</label>

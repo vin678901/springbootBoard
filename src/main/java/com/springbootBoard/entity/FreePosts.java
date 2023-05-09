@@ -23,11 +23,14 @@ public class FreePosts extends Posts {
         this.likeCount = 0;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void update(String title, String content, String nickName) {
         this.title = title;
         this.content = content;
         this.nickName = nickName;
     }
-
 
 }

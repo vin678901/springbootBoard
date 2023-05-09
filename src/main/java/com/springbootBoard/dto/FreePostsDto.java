@@ -16,6 +16,8 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class FreePostsDto extends BaseEntity {
 
+    private Long id;
+
     @NotEmpty(message = "제목을 입력해 주세요.")
     private String title;
 

@@ -6,23 +6,45 @@
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
-function likeIt() {
-  var postId = /* 게시물 ID */;
-  var email = /* 현재 사용자의 이메일 */;
-
-  $.ajax({
-    url: '/free/' + postId + '/like',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ email: email }),
-    success: function() {
-      /* 좋아요 성공 처리 */
-    },
-    error: function() {
-      /* 좋아요 실패 처리 */
+function toggleLike(postId) {
+  fetch(`/posts/free/${postId}/like`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
     }
+  })
+  .then(response => response.json())
+  .then(data => {
+    // 성공적으로 처리된 경우, 좋아요 수 업데이트
+    const likeCount = data.likeCount;
+    const likeButton = document.getElementById(`like-button-${postId}`);
+    likeButton.innerHTML = `${likeCount} 좋아요`;
+  })
+  .catch(error => {
+    // 실패한 경우, 에러 메시지 출력
+    console.error(error);
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     </script>
 </th:block>
@@ -44,15 +66,21 @@ function likeIt() {
             </tbody>
         </table>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" onclick="likeIt()">
+
+    <button th:id="'like-button-' + ${freePosts.id}"
+            th:onclick="'toggleLike(' + ${freePosts.id} + ')'">
         좋아요
     </button>
+    <span th:text="${freePosts.likeCount} + ' 좋아요'"></span>
     <div>
         <h2 th:text="${freePosts.title}"></h2>
         <p th:text="${freePosts.content}"></p>
         <p>작성자: <span th:text="${freePosts.nickName}"></span></p>
     </div>
-
+    <div>
+        <a th:href="'/posts/free/edit/' + ${freePosts.id}">수정</a>
+        <a th:href="@{/posts/free/delete(id=${freePosts.id})}">삭제</a>
+    </div>
 </div>
 
 </html>
