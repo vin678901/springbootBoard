@@ -37,11 +37,7 @@ public class FreePostsService {
     public int freeViewCountPlus(Long id) {
         return freePostsRepository.viewCountPlus(id);
     }
-
-    @Transactional(readOnly = true)
-    public Page getFreePostsPage(FreePostsDto freePostsDto, Pageable pageable) {
-        return freePostsRepository.getFreePostsPage(freePostsDto, pageable);
-    }
+    
 
     public void freePostsLike(Long id, String email) {
         BoardUser boardUser = boardUserService.getUserByEmail(email);
@@ -79,4 +75,5 @@ public class FreePostsService {
         }
         freePostsRepository.delete(freePosts);
     }
+
 }

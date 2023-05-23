@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface FreePostsRepository extends JpaRepository<FreePosts, Long>,
@@ -16,6 +17,6 @@ public interface FreePostsRepository extends JpaRepository<FreePosts, Long>,
 
     @Modifying//트랜잭션 안에서 수행됨. update 혹은 delete 사용할 때 사용
     @Query("update FreePosts p set p.viewCount = p.viewCount + 1 where p.id = :id")
-    int viewCountPlus(Long id);
-
+    int viewCountPlus(@Param("id") Long id);
+//@Param어노테이션을 사용해서 매개변수에 이름을 제공한다
 }

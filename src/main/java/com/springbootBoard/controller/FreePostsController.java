@@ -1,11 +1,14 @@
 package com.springbootBoard.controller;
 
+import com.springbootBoard.dto.CommentDto;
 import com.springbootBoard.dto.FreePostsDto;
 import com.springbootBoard.dto.PostsSearchDto;
 import com.springbootBoard.entity.BoardUser;
 import com.springbootBoard.entity.FreePosts;
 import com.springbootBoard.service.BoardUserService;
+import com.springbootBoard.service.CommentService;
 import com.springbootBoard.service.FreePostsService;
+import com.springbootBoard.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +33,11 @@ public class FreePostsController {
 
     private final BoardUserService boardUserService;
 
+    private final PostsService postsService;
+
+    private final CommentService commentService;
+
+
     @GetMapping("/free")
     public String free(PostsSearchDto postsSearchDto, Model model, Optional<Integer> page) {
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
@@ -53,7 +61,7 @@ public class FreePostsController {
             return "posts/freeWrite";
         }
 
-        try {//title이랑 content만 전달이 되는 상태. title, content, nickName 필요
+        try {
             String email = principal.getName();
             BoardUser boardUser = boardUserService.getUserByEmail(email);
             freePostsDto.setNickName(boardUser.getNickName());
@@ -66,11 +74,16 @@ public class FreePostsController {
     }
 
     @GetMapping("/free/{id}")
-    public String freeDetail(@PathVariable("id") Long id, Model model) {
+    public String freeDetail(@PathVariable("id") Long id, Model model, Principal principal, Optional<Integer> page) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+        Page<CommentDto> commentDto = commentService.getAllComments(postsService.getPostsById(id), pageable);
 
+        model.addAttribute("commentDto", new CommentDto());
         FreePosts freePosts = freePostsService.getFreePosts(id);
         freePostsService.freeViewCountPlus(id);
         model.addAttribute("freePosts", freePosts);
+
+        model.addAttribute("comments", commentDto.getContent()); // 수정된 부분
         return "posts/freeDetail";
     }
 
@@ -87,7 +100,6 @@ public class FreePostsController {
         try {
             FreePostsDto freePostsDto = freePostsService.getFreePostsDetail(id);
             model.addAttribute("freePostsDto", freePostsDto);
-
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "posts/freeWrite";
@@ -107,7 +119,7 @@ public class FreePostsController {
         try {
             FreePosts freePosts = freePostsDto.toEntity();
             freePosts.setId(freePostsDto.getId());
-            freePostsService.updateFreePosts(freePosts.getId(), freePostsDto, email);//여기서 nickname
+            freePostsService.updateFreePosts(freePosts.getId(), freePostsDto, email);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "posts/freeWrite";

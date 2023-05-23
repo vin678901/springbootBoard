@@ -33,4 +33,5 @@ public class FreePosts extends Posts {
         this.nickName = nickName;
     }
 
+
 }

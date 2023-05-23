@@ -1,10 +1,11 @@
 package com.springbootBoard.entity;
 
-import com.springbootBoard.constant.Category;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +33,9 @@ public class Posts extends BaseEntity {
 
     protected Integer likeCount;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "posts", cascade = CascadeType.ALL)
+    protected List<Comment> comment = new ArrayList<>();
+
     public void plusLikeCount() {
         this.likeCount++;
     }
@@ -39,4 +43,11 @@ public class Posts extends BaseEntity {
     public void minusLikeCount() {
         this.likeCount--;
     }
+
+    public void addComment(Comment comment) {
+        this.comment.add(comment);
+        comment.addPosts(this);
+    }
+
+
 }

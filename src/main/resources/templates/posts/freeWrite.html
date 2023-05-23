@@ -12,6 +12,7 @@
 
 
 
+
     </style>
 </th:block>
 
@@ -27,6 +28,7 @@
 
 
 
+
     </script>
 
 </th:block>
@@ -38,7 +40,6 @@
             <input class="form-control" placeholder="내용을 입력해주세요" th:field="*{title}" type="text">
 
             <p class="fieldError" th:errors="*{title}" th:if="${#fields.hasErrors('title')}">Incorrect data</p>
-
         </div>
 
         <div class="form-group">

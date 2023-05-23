@@ -43,6 +43,11 @@ public class BoardUserService implements UserDetailsService {
         boardUser.updateBoardUser(userUpdateDto);
     }
 
+    public BoardUser findByEmail(String email) {
+        return boardUserRepository.findByEmail(email);
+    }
+
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         BoardUser boardUser = boardUserRepository.findByEmail(email);

@@ -53,9 +53,11 @@ class BoardUserServiceTest {
         String email = boardUser.getEmail();
 
         boardUserService.updateBoardUser(email, userUpdateDto);
-        
+
         assertThat(userUpdateDto.getNickName()).isEqualTo(boardUser.getNickName());
         assertThat(userUpdateDto.getName()).isEqualTo(boardUser.getName());
         assertThat(userUpdateDto.getPassword()).isEqualTo(boardUser.getPassword());
     }
+    
+
 }

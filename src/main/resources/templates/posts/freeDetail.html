@@ -2,6 +2,7 @@
 <html layout:decorate="~{layouts/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <th:block layout:fragment="script">
 
@@ -28,21 +29,33 @@ function toggleLike(postId) {
 
 
 
+    </script>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    function saveComment(postId){
+        const text=document.getElementById('text');
+        const params={
+            postsId : postId,
+            text : text.value,
+            nickName : [[${nickName}]]
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        $.ajax({
+            url : `/posts/free/${postId}/comment`,
+            type : 'post',
+            contentType : 'application/json; charset=utf-8',
+            dataType : 'json',
+            data : JSON.stringify(params),
+            async : true,
+            success : function(response){
+                console.log(response);
+            },
+            error : function(request, status, error){
+                console.log(error)
+            }
+        })
+}
 
 
 
@@ -77,10 +90,33 @@ function toggleLike(postId) {
         <p th:text="${freePosts.content}"></p>
         <p>작성자: <span th:text="${freePosts.nickName}"></span></p>
     </div>
+
+    <form th:action="@{'/posts/free/' + ${freePosts.id} +'/comment'}" method="post" th:object="${commentDto}"
+          class="form-group">
+        <label>댓글 달기</label>
+        <input type="text" th:field="${commentDto.text}" class="form-control" placeholder="댓글을 입력해주세요">
+
+        <button type="submit" class="btn btn-dark" style="float:right;" onclick="saveComment(); return false;">댓글 입력
+        </button>
+    </form>
+
     <div>
         <a th:href="'/posts/free/edit/' + ${freePosts.id}">수정</a>
         <a th:href="@{/posts/free/delete(id=${freePosts.id})}">삭제</a>
     </div>
+
+    <!-- 댓글 목록 -->
+    <div th:each="comment : ${comments}">
+        <p th:text="${comment.text}"></p>
+        <p th:text="${comment.nickName}"></p>
+
+        <a th:href="@{/comment/edit/{id}(id=${comment.id})}">수정</a>
+        <!-- 삭제 버튼 -->
+        <form th:action="@{/comment/delete/{id}(id=${comment.id})}" method="post">
+            <button type="submit">삭제</button>
+        </form>
+    </div>
+
 </div>
 
 </html>
